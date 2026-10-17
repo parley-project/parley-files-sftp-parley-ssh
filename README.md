@@ -1,4 +1,4 @@
-# parley-files-sftp-parley
+# parley-files-sftp-parley-ssh
 
 The parley-ssh provider for [parley-files-sftp](https://github.com/parley-project/parley-files-sftp): SFTP through
 [parley-ssh](https://github.com/parley-project/parley-ssh), Parley's own SSH library, with no third party
@@ -7,7 +7,7 @@ code.
 ```xml
 <dependency>
     <groupId>us.bringardner.parley</groupId>
-    <artifactId>parley-files-sftp-parley</artifactId>
+    <artifactId>parley-files-sftp-parley-ssh</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```

@@ -11,7 +11,7 @@
 		<relativePath>../parley-parent/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>parley-files-sftp-parley</artifactId>
+	<artifactId>parley-files-sftp-parley-ssh</artifactId>
 	<version>1.0.0</version>
 	<name>Parley Files SFTP: parley-ssh</name>
 	<description>The parley-ssh provider for parley-files-sftp: SFTP through Parley's own SSH library, no third party code. Put it on the class path; when several providers are there and none is chosen, this one is used.</description>
@@ -27,7 +27,7 @@
 		<repository>
 			<id>github</id>
 			<name>parley-project</name>
-			<url>https://maven.pkg.github.com/parley-project/parley-files-sftp-parley</url>
+			<url>https://maven.pkg.github.com/parley-project/parley-files-sftp-parley-ssh</url>
 		</repository>
 	</distributionManagement>
 
