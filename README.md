@@ -28,6 +28,13 @@ writing at any position in one request, links and permissions.
 macOS and Linux through Unix domain sockets, which arrived in Java 16. On Java 11 to 14 those fail with an
 `IOException` that says so; RSA and ECDSA keys, passwords and the Windows agents work on Java 11.
 
+
+## Locks and FileChannel
+
+As parley-files-sftp describes: `PROCESS` locks, atomic `createNewFile()` (an exclusive open), `map()` of a local
+copy in `READ_ONLY` and `PRIVATE` modes, and `force()` that sends what is held, then asks the server to sync the
+file with `fsync@openssh.com` when it offers that.
+
 ## Testing
 
 `mvn verify` runs parley-files-sftp's provider test suite against this provider (the tests jar, through
