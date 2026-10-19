@@ -70,6 +70,15 @@ class ParleySftpFile implements SftpFile {
 		});
 	}
 
+	/** Asks the server to sync the file ({@code fsync@openssh.com}), if it offers that. */
+	@Override
+	public void sync() throws IOException {
+		ParleySftpChannel.call(path, () -> {
+			channel.fsync(handle);
+			return null;
+		});
+	}
+
 	@Override
 	public void truncate(long size) throws IOException {
 		if( !writable ) {

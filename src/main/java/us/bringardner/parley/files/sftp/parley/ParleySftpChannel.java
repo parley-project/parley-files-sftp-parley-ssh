@@ -195,7 +195,55 @@ class ParleySftpChannel extends AbstractSftpChannel {
 	/** Pipelined: several write requests in flight; errors come from a later write or close(). */
 	@Override
 	public OutputStream write(String path, boolean append) throws IOException {
-		return guardedOutput(path, call(path, () -> sftp.write(path, append)));
+		return guardedOutput(path, call(path, () -> openWrite(path, append)));
+	}
+
+	/**
+	 * What SftpClient.write does, keeping the handle so the stream is Syncable: sync() waits for
+	 * every write to be acknowledged, then asks the server to sync the file (fsync@openssh.com) if
+	 * it offers that.
+	 */
+	private OutputStream openWrite(String path, boolean append) throws IOException {
+		int flags = SftpConstants.SSH_FXF_WRITE | SftpConstants.SSH_FXF_CREAT | (append ? SftpConstants.SSH_FXF_APPEND : SftpConstants.SSH_FXF_TRUNC);
+		SftpHandle h = sftp.open(path, flags, SftpAttrs.NONE);
+		long offset = 0;
+		if( append ) {
+			// not every server honours SSH_FXF_APPEND: write at the end explicitly as well
+			try {
+				offset = sftp.fstat(h).getSize();
+			} catch (IOException e) {
+				h.close();
+				throw e;
+			}
+		}
+		return new SyncableOutput(new us.bringardner.parley.ssh.sftp.SftpOutputStream(sftp, h, offset, true), h);
+	}
+
+	/** fsync@openssh.com on a handle, if the server offers it; nothing otherwise. */
+	void fsync(SftpHandle h) throws IOException {
+		if( sftp.hasExtension(SftpConstants.EXT_FSYNC) ) {
+			sftp.fsync(h);
+		}
+	}
+
+	private final class SyncableOutput extends java.io.FilterOutputStream implements us.bringardner.parley.files.Syncable {
+		private final SftpHandle handle;
+
+		SyncableOutput(OutputStream out, SftpHandle handle) {
+			super(out);
+			this.handle = handle;
+		}
+
+		@Override
+		public void write(byte[] b, int off, int len) throws IOException {
+			out.write(b, off, len);
+		}
+
+		@Override
+		public void sync() throws IOException {
+			out.flush();
+			fsync(handle);
+		}
 	}
 
 	@Override
