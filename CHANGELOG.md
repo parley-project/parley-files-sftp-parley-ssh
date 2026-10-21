@@ -1,5 +1,12 @@
 # Changelog
 
+## parley-files-sftp-parley-ssh 2.0.0 (unreleased)
+
+### Changed (needs a configuration change)
+
+- The provider is chosen with `parley.files.sftp.implementation=parley` (was `parley.sftp.implementation`),
+  and the shared suite's settings are `parley.files.sftp.test.*`. The `bjl.sftp.*` names are no longer read.
+
 ## parley-files-sftp-parley-ssh 1.1.0 (unreleased)
 
 ### Added

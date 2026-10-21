@@ -16,7 +16,7 @@ It brings parley-files-sftp with it.
 
 It is the provider parley-files-sftp prefers: with it on the class path, a factory that names no provider
 uses it, even when other providers are there too. Choose another with the `implementation` connection
-property or `-Dparley.sftp.implementation`.
+property or `-Dparley.files.sftp.implementation`.
 
 ## What it supports
 
@@ -39,4 +39,4 @@ file with `fsync@openssh.com` when it offers that.
 
 `mvn verify` runs parley-files-sftp's provider test suite against this provider (the tests jar, through
 surefire's `dependenciesToScan`), and this project's own tests: the parley-specific ones (`SftpBatch23Test`) and that the older name `bjl` still selects it (`SftpLegacyNamesTest`). See "Testing a provider" in parley-files-sftp's README; the
-suite's server is chosen with `-Dparley.sftp.test.server` as described there.
+suite's server is chosen with `-Dparley.files.sftp.test.server` as described there.

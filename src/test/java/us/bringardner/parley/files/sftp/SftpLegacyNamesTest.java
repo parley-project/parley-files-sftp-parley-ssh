@@ -10,17 +10,16 @@ import us.bringardner.parley.files.sftp.spi.SshProviders;
 import us.bringardner.parley.files.sftp.parley.ParleyProvider;
 
 /**
- * The move to Parley renamed the "bjl" SSH library to "parley" and the bjl.sftp.* system
- * properties to parley.sftp.*. The old names must keep working. No server needed.
+ * The move to Parley renamed the "bjl" SSH library to "parley"; "bjl" must keep working as a name.
+ * (The bjl.sftp.* system properties are no longer read: in 2.0.0 they are parley.files.sftp.*.)
+ * No server needed.
  */
 public class SftpLegacyNamesTest {
 
 	@AfterEach
 	public void clearProperties() {
 		System.clearProperty(SshProviders.SYSTEM_PROPERTY);
-		System.clearProperty(SshProviders.LEGACY_SYSTEM_PROPERTY);
 		System.clearProperty(SftpFileSourceFactory.SYSTEM_PROPERTY_ATTRIBUTE_CACHE_TTL);
-		System.clearProperty(SftpFileSourceFactory.LEGACY_SYSTEM_PROPERTY_ATTRIBUTE_CACHE_TTL);
 	}
 
 	@Test
@@ -42,18 +41,15 @@ public class SftpLegacyNamesTest {
 	}
 
 	@Test
-	public void oldImplementationPropertyStillWorks() {
-		System.setProperty(SshProviders.LEGACY_SYSTEM_PROPERTY, "bjl");
+	public void implementationProperty() {
+		System.setProperty(SshProviders.SYSTEM_PROPERTY, "bjl");
 		assertEquals(SshProviders.PARLEY, SshProviders.defaultName());
-		// the new property wins when both are set
 		System.setProperty(SshProviders.SYSTEM_PROPERTY, "mina");
 		assertEquals("mina", SshProviders.defaultName());
 	}
 
 	@Test
-	public void oldAttributeCacheTtlPropertyStillWorks() {
-		System.setProperty(SftpFileSourceFactory.LEGACY_SYSTEM_PROPERTY_ATTRIBUTE_CACHE_TTL, "123");
-		assertEquals(123, SftpFileSourceFactory.defaultAttributeCacheTtl());
+	public void attributeCacheTtlProperty() {
 		System.setProperty(SftpFileSourceFactory.SYSTEM_PROPERTY_ATTRIBUTE_CACHE_TTL, "456");
 		assertEquals(456, SftpFileSourceFactory.defaultAttributeCacheTtl());
 	}

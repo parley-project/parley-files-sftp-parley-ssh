@@ -25,7 +25,7 @@ import us.bringardner.parley.files.sftp.spi.SshProviders;
 /**
  * Batch 23: a third SSH library, Parley's own (parley-ssh, "parley"), selected like the others
  * with the implementation property. Everything else in the suite can run on it with
- * -Dparley.sftp.implementation=parley; the tests parameterized by library include it.
+ * -Dparley.files.sftp.implementation=parley; the tests parameterized by library include it.
  * <p>
  * Connects to the test server: OpenSSH on localhost:22 or the embedded server (see TestServer).
  */
