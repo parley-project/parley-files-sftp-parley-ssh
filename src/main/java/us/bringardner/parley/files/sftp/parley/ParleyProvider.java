@@ -1,6 +1,5 @@
 package us.bringardner.parley.files.sftp.parley;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
@@ -13,6 +12,7 @@ import us.bringardner.parley.files.sftp.spi.SshProviders;
 import us.bringardner.parley.files.sftp.spi.SshSettings;
 import us.bringardner.parley.ssh.SshConstants;
 import us.bringardner.parley.ssh.SshException;
+import us.bringardner.parley.ssh.SshFiles;
 import us.bringardner.parley.ssh.client.ClientSession;
 import us.bringardner.parley.ssh.client.HostKeyVerifiers;
 import us.bringardner.parley.ssh.client.IClientAuthMethod;
@@ -46,7 +46,7 @@ public class ParleyProvider implements SshProvider {
 		boolean ok = false;
 		try {
 			if( s.isStrictHostKeyChecking() ) {
-				client.setHostKeyVerifier(new KnownHosts(new File(SshProviders.knownHostsFile(s))));
+				client.setHostKeyVerifier(new KnownHosts(SshFiles.local(SshProviders.knownHostsFile(s))));
 			} else {
 				client.setHostKeyVerifier(HostKeyVerifiers.acceptAll());
 			}
@@ -116,7 +116,7 @@ public class ParleyProvider implements SshProvider {
 		if( s.getPrivateKey() != null ) {
 			ret.add(SshKeyLoader.parse(new String(s.getPrivateKey(), StandardCharsets.US_ASCII), null));
 		} else if( s.getPrivateKeyFile() != null && !s.getPrivateKeyFile().isEmpty() ) {
-			ret.add(SshKeyLoader.load(new File(s.getPrivateKeyFile()), null));
+			ret.add(SshKeyLoader.load(SshFiles.local(s.getPrivateKeyFile()), null));
 		}
 		return ret;
 	}
