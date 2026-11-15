@@ -2,6 +2,11 @@
 
 ## parley-files-sftp-parley-ssh 2.0.0 (unreleased)
 
+### Added (2026-11-15: running programs on the server)
+
+- **`SshConnection.start(command)`**: a command that runs while its streams are read, for
+  parley-files-sftp's `processBuilder` (connection setting `runCommands`).
+
 ### Changed (needs a configuration change)
 
 - The provider is chosen with `parley.files.sftp.implementation=parley` (was `parley.sftp.implementation`),
