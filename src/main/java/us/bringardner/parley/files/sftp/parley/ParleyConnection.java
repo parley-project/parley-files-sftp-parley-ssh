@@ -41,18 +41,6 @@ class ParleyConnection implements SshConnection {
 	}
 
 	@Override
-	public Process start(String command) throws IOException {
-		us.bringardner.parley.ssh.client.SessionChannel channel = session.openSession();
-		try {
-			channel.exec(command);
-		} catch (IOException | RuntimeException e) {
-			channel.close();
-			throw e;
-		}
-		return new ParleyProcess(channel);
-	}
-
-	@Override
 	public void close() {
 		try {
 			session.close();
