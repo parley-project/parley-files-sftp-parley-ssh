@@ -138,6 +138,27 @@ class ParleySftpChannel extends AbstractSftpChannel {
 		call(path, () -> { sftp.setStat(path, SftpAttrs.NONE.withPermissions(mode & 07777)); return null; });
 	}
 
+	/** lsetstat@openssh.com, when the server announced it. */
+	@Override
+	public boolean canSetLinkAttributes() throws IOException {
+		return sftp.hasExtension(us.bringardner.parley.ssh.sftp.SftpConstants.EXT_LSETSTAT);
+	}
+
+	@Override
+	public void setLinkAttributes(String path, Long uid, Long gid, Long accessSeconds, Long modifySeconds) throws IOException {
+		call(path, () -> {
+			SftpAttrs a = SftpAttrs.NONE;
+			if( uid != null && gid != null ) {
+				a = a.withOwner((int) (long) uid, (int) (long) gid);
+			}
+			if( accessSeconds != null && modifySeconds != null ) {
+				a = a.withTimes(accessSeconds, modifySeconds);
+			}
+			sftp.lsetStat(path, a);
+			return null;
+		});
+	}
+
 	@Override
 	public void chown(String path, long uid) throws IOException {
 		// SFTP v3 sets uid and gid together; keep the group
